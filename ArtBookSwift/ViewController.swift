@@ -14,6 +14,9 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var nameArray = [String] ()
     var idArray = [UUID] ()
     
+    var selectedPainting = ""
+    var selectedId : UUID?
+    
     
     
     override func viewDidLoad() {
@@ -79,9 +82,24 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     
     @objc func addButtonClicked(){
-        
+        selectedPainting = ""
         performSegue(withIdentifier: "toDetailsVC", sender: nil)
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toDetailsVC" {
+            let destinationVC = segue.destination as! DetailsViewController
+            destinationVC.chosenPainting = selectedPainting
+            destinationVC.chosenId = selectedId
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedPainting = nameArray[indexPath.row]
+        selectedId = idArray[indexPath.row]
+        
+        performSegue(withIdentifier: "toDetailsVC", sender: nil)
     }
 }
 
