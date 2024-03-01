@@ -17,16 +17,19 @@ class DetailsViewController: UIViewController,UIImagePickerControllerDelegate,UI
     @IBOutlet weak var nameText: UITextField!
     @IBOutlet weak var artistText: UITextField!
     
+    @IBOutlet weak var saveButtonOutlet: UIButton!
     var chosenPainting = ""
     var chosenId : UUID?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        saveButtonOutlet.isEnabled = false
 
 
         if chosenPainting != "" {
             //CoreData
-            
+            saveButtonOutlet.isHidden = true
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context = appDelegate.persistentContainer.viewContext
             
@@ -68,12 +71,12 @@ class DetailsViewController: UIViewController,UIImagePickerControllerDelegate,UI
         
         
         //Recognizers
-        var gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         
         view.addGestureRecognizer(gestureRecognizer)
         
         imageView.isUserInteractionEnabled = true
-        var imageViewRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectImage))
+        let imageViewRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectImage))
         imageView.addGestureRecognizer(imageViewRecognizer)
         
     
@@ -91,7 +94,8 @@ class DetailsViewController: UIViewController,UIImagePickerControllerDelegate,UI
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-    
+
+        saveButtonOutlet.isEnabled=true
         imageView.image = info[.originalImage] as? UIImage
         
         self.dismiss(animated: true, completion: nil)
